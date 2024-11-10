@@ -1,8 +1,6 @@
-// Import Firebase functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getFirestore, doc, setDoc, addDoc, collection, onSnapshot, serverTimestamp, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDMGCzjVLZUVZHCCxBDql5npVz_wcKxEX4",
   authDomain: "chat-room-eda59.firebaseapp.com",
@@ -12,11 +10,9 @@ const firebaseConfig = {
   appId: "1:1063922969354:web:c1693925c907a1681368f3"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// UI elements
 const usernameInput = document.getElementById("username");
 const roomCodeInput = document.getElementById("room-code");
 const createRoomBtn = document.getElementById("create-room-btn");
@@ -31,7 +27,6 @@ const roomTitle = document.getElementById("room-id");
 
 let roomId;
 let username;
-
 
 function showChatSection() {
   authSection.style.display = "none";
@@ -53,24 +48,18 @@ function listenForMessages() {
         chatBox.appendChild(msgEl);
       }
     });
-
-
     chatBox.scrollTop = chatBox.scrollHeight;
   });
 }
 
-
 function generateRoomCode() {
   const randomDigits = Math.floor(10000 + Math.random() * 90000);
-  return `${randomDigits}`;  
+  return `${randomDigits}`;
 }
-
 
 createRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
   if (!username) return alert("Please enter a username.");
-
-
   roomId = generateRoomCode();
   await setDoc(doc(db, "rooms", roomId), {});
   roomTitle.textContent = roomId;
@@ -81,12 +70,9 @@ createRoomBtn.addEventListener("click", async () => {
 joinRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
   roomId = roomCodeInput.value.trim();
-
   if (!username || !roomId) return alert("Please enter both a username and room code.");
-
   const roomDoc = await getDoc(doc(db, "rooms", roomId));
   if (!roomDoc.exists()) return alert("Room not found.");
-
   roomTitle.textContent = roomId;
   showChatSection();
   listenForMessages();
@@ -102,17 +88,13 @@ messageInput.addEventListener("keydown", (e) => {
 
 async function sendMessage() {
   const message = messageInput.value.trim();
-  if (!message) return; 
-
-
+  if (!message) return;
   await addDoc(collection(db, "rooms", roomId, "messages"), {
     username,
     text: message,
     timestamp: serverTimestamp()
   });
-
   messageInput.value = "";
-  
   messageInput.focus();
 }
 
