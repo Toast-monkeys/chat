@@ -117,8 +117,9 @@ async function sendMessage() {
     timestamp: serverTimestamp()
   });
 
-  // Clear input field after sending
+  // Clear the input field immediately after sending
   messageInput.value = "";
+  messageInput.blur();  // Optionally remove focus from the input field to avoid lingering cursor
 }
 
 // Leave room
