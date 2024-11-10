@@ -106,7 +106,6 @@ button:hover {
 .footer a {
   color: #fff;
   text-decoration: underline;
-  transition: none;
 }
 
 .footer a:hover {
