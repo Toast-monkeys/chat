@@ -210,14 +210,8 @@
         timestamp: serverTimestamp()
       });
 
-      // Add message to the chat box immediately (for local display)
-      const msgEl = document.createElement("p");
-      msgEl.textContent = `${username}: ${message}`;
-      chatBox.appendChild(msgEl);
-
       // Clear input field after sending
       messageInput.value = "";
-      chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the latest message
     }
 
     // Leave room
