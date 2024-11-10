@@ -68,7 +68,7 @@ button:hover {
 }
 
 #chat-box {
-  height: 400px;
+  height: 300px; /* Adjusted height to 3/4 of the original */
   overflow-y: auto;
   background-color: #0a0a0a;
   padding: 10px;
