@@ -25,19 +25,19 @@ body {
   padding: 20px;
   background-color: #1a1a1a;
   border-radius: 10px;
-  box-shadow: 0 0 15px #00bfff;
+  box-shadow: 0 0 15px #005f8d;
 }
 
 h1 {
   text-align: center;
-  color: #00bfff;
+  color: #005f8d;
   font-size: 2.5em;
   margin-bottom: 20px;
 }
 
 #room-title {
   text-align: center;
-  color: #00bfff;
+  color: #005f8d;
   font-size: 1.8em;
   margin-bottom: 15px;
 }
@@ -56,7 +56,7 @@ h1 {
 }
 
 button {
-  background-color: #00bfff;
+  background-color: #005f8d;
   color: #fff;
   cursor: pointer;
   border: none;
@@ -64,7 +64,7 @@ button {
 }
 
 button:hover {
-  background-color: #0080ff;
+  background-color: #004c73;
 }
 
 #chat-box {
@@ -74,7 +74,7 @@ button:hover {
   padding: 10px;
   margin: 10px 0;
   border-radius: 8px;
-  box-shadow: 0 0 10px #00bfff;
+  box-shadow: 0 0 10px #005f8d;
 }
 
 #message-input {
@@ -99,7 +99,7 @@ button:hover {
   text-align: center;
   padding: 10px;
   color: #ccc;
-  font-size: 14px;
+  font-size: 21px;
   margin-top: auto;
 }
 
