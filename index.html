@@ -39,6 +39,7 @@
       color: #e0e0e0;
       border: none;
       border-radius: 5px;
+      font-size: 1rem;
     }
 
     button {
@@ -163,17 +164,36 @@
     });
 
     // Send a message
-    sendBtn.addEventListener("click", async () => {
+    sendBtn.addEventListener("click", sendMessage);
+
+    // Handle Enter key to send message
+    messageInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+
+    // Function to send a message
+    async function sendMessage() {
       const message = messageInput.value.trim();
       if (!message) return;
 
+      // Add message to Firestore
       await addDoc(collection(db, "rooms", roomId, "messages"), {
         username,
         text: message,
         timestamp: serverTimestamp()
       });
+
+      // Add message to the chat box immediately (for local display)
+      const msgEl = document.createElement("p");
+      msgEl.textContent = `${username}: ${message}`;
+      chatBox.appendChild(msgEl);
+
+      // Clear input field after sending
       messageInput.value = "";
-    });
+      chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the latest message
+    }
 
     // Listen for new messages
     function listenForMessages() {
