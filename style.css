@@ -1,12 +1,17 @@
 body {
   background-color: #0a0a0a;
   color: #f1f1f1;
-  font-family: Arial, sans-serif;
+  font-family: Inter, sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url(fonts/Inter.ttf);
 }
 
 #app {
@@ -25,19 +30,19 @@ body {
   padding: 20px;
   background-color: #1a1a1a;
   border-radius: 10px;
-  box-shadow: 0 0 15px #005f8d;
+  box-shadow: 0 0 15px #28a9ea;
 }
 
 h1 {
   text-align: center;
-  color: #005f8d;
+  color: #28a9ea;
   font-size: 2.5em;
   margin-bottom: 20px;
 }
 
 #room-title {
   text-align: center;
-  color: #005f8d;
+  color: #28a9ea;
   font-size: 1.8em;
   margin-bottom: 15px;
 }
@@ -56,7 +61,7 @@ h1 {
 }
 
 button {
-  background-color: #005f8d;
+  background-color: #28a9ea;
   color: #fff;
   cursor: pointer;
   border: none;
@@ -64,7 +69,7 @@ button {
 }
 
 button:hover {
-  background-color: #004c73;
+  background-color: #289ad3;
 }
 
 #chat-box {
@@ -74,7 +79,7 @@ button:hover {
   padding: 10px;
   margin: 10px 0;
   border-radius: 8px;
-  box-shadow: 0 0 10px #005f8d;
+  box-shadow: 0 0 10px #28a9ea;
 }
 
 #message-input {
