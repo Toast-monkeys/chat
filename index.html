@@ -87,30 +87,30 @@
 
     // Listen for new messages
     function listenForMessages() {
+      const colors = ['#FF0000', '#1f51ff', '#50C878', '#FF1493', '#FF0000', '#FF8C00', '#FFD700', '#8A2BE2', '#DAA520'];
+      
       const q = query(collection(db, "rooms", roomId, "messages"), orderBy("timestamp"));
       onSnapshot(q, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
             const { username, text } = change.doc.data();
             const msgEl = document.createElement("p");
-            // Create a span for the username with the blue color
             const usernameSpan = document.createElement("span");
-            usernameSpan.style.color = "#1f51ff";
+            // Pick a random color from the array
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            usernameSpan.style.color = randomColor;
             usernameSpan.textContent = username;
-            usernameSpan.style.fontWeight = "bold";
-            // Create a text node for the message
             const messageText = document.createTextNode(`: ${text}`);
-            // Append both elements to the paragraph
             msgEl.appendChild(usernameSpan);
             msgEl.appendChild(messageText);
             chatBox.appendChild(msgEl);
           }
         });
     
-        // Keep the chat scrolled to the bottom
         chatBox.scrollTop = chatBox.scrollHeight;
       });
     }
+    
     
 
     // Create a new room
