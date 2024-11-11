@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-import { getFirestore, doc, setDoc, addDoc, collection, onSnapshot, serverTimestamp, query, orderBy, getDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, addDoc, collection, onSnapshot, serverTimestamp, query, orderBy, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMGCzjVLZUVZHCCxBDql5npVz_wcKxEX4",
@@ -28,6 +28,7 @@ const roomTitle = document.getElementById("room-id");
 const encodedPassword = "Q09PTEdVWS"; 
 let roomId;
 let username;
+let roomName;
 let isAdmin = false;
 
 function showChatSection() {
@@ -83,14 +84,15 @@ createRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
   if (!username) return alert("Please enter a username.");
   roomId = generateRoomCode();
-  const roomName = document.getElementById("room-name").value.trim() || roomId; 
-  
+  roomName = prompt("Enter a room name:");
+  if (!roomName) return alert("Please enter a room name.");
+
   await setDoc(doc(db, "rooms", roomId), {
     active: true,
     roomName: roomName
   });
 
-  roomTitle.textContent = `Room: ${roomName}`;
+  roomTitle.textContent = `Room: ${roomId} ${roomName}`;
   showChatSection();
   listenForMessages();
 });
@@ -99,13 +101,11 @@ joinRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
   roomId = roomCodeInput.value.trim();
   if (!username || !roomId) return alert("Please enter both a username and room code.");
-  
   const roomDoc = await getDoc(doc(db, "rooms", roomId));
   if (!roomDoc.exists()) return alert("Room not found.");
-  
-  const roomData = roomDoc.data();
-  roomTitle.textContent = `Room: ${roomData.roomName || roomId}`;
 
+  roomName = roomDoc.data().roomName;
+  roomTitle.textContent = `Room: ${roomId} ${roomName}`;
   showChatSection();
   listenForMessages();
 });
