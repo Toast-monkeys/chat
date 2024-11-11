@@ -69,11 +69,11 @@ button {
 }
 
 button:hover {
-  background-color: #289ad3;
-}
+  background-color: #236383;
+}  /* Slightly darker hover*/
 
 #chat-box {
-  height: 300px; /* Adjusted height to 3/4 of the original */
+  height: 300px; 
   overflow-y: auto;
   background-color: #0a0a0a;
   padding: 10px;

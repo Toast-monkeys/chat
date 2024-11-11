@@ -27,6 +27,8 @@ const roomTitle = document.getElementById("room-id");
 
 let roomId;
 let username;
+let isAdmin = false;
+let roomName = "";
 
 function showChatSection() {
   authSection.style.display = "none";
@@ -57,23 +59,58 @@ function generateRoomCode() {
   return `${randomDigits}`;
 }
 
+// Admin mode login
+document.addEventListener("keydown", (e) => {
+  if (e.key === "`") {
+    const adminPassword = prompt("Enter admin password:");
+    if (adminPassword === "COOLGUY") {
+      isAdmin = true;
+      alert("Admin mode activated!");
+      showAdminInterface();
+    } else {
+      alert("Incorrect password.");
+    }
+  }
+});
+
+function showAdminInterface() {
+  // List all rooms for admin to choose from
+  const roomsRef = collection(db, "rooms");
+  onSnapshot(roomsRef, (snapshot) => {
+    const roomList = snapshot.docs.map(doc => doc.id);
+    const roomSelect = prompt("Select a room by code:\n" + roomList.join("\n"));
+    if (roomList.includes(roomSelect)) {
+      roomId = roomSelect;
+      roomTitle.textContent = `Room: ${roomId}`;
+      showChatSection();
+      listenForMessages();
+    } else {
+      alert("Room not found.");
+    }
+  });
+}
+
+// Creating a room (Admin or Non-Admin)
 createRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
   if (!username) return alert("Please enter a username.");
   roomId = generateRoomCode();
-  await setDoc(doc(db, "rooms", roomId), {});
-  roomTitle.textContent = roomId;
+  roomName = prompt("Enter a room name:") || `Room ${roomId}`;
+  await setDoc(doc(db, "rooms", roomId), { name: roomName });
+  roomTitle.textContent = roomName;
   showChatSection();
   listenForMessages();
 });
 
+// Joining a room (Non-Admin or Admin)
 joinRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
   roomId = roomCodeInput.value.trim();
   if (!username || !roomId) return alert("Please enter both a username and room code.");
   const roomDoc = await getDoc(doc(db, "rooms", roomId));
   if (!roomDoc.exists()) return alert("Room not found.");
-  roomTitle.textContent = roomId;
+  roomName = roomDoc.data().name;
+  roomTitle.textContent = roomName;
   showChatSection();
   listenForMessages();
 });
