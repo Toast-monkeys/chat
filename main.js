@@ -1,6 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-import { getFirestore, doc, setDoc, addDoc, collection, onSnapshot, serverTimestamp, query, orderBy, getDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
-
+// Firebase configuration and imports
 const firebaseConfig = {
   apiKey: "AIzaSyDMGCzjVLZUVZHCCxBDql5npVz_wcKxEX4",
   authDomain: "chat-room-eda59.firebaseapp.com",
@@ -10,9 +8,10 @@ const firebaseConfig = {
   appId: "1:1063922969354:web:c1693925c907a1681368f3"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
+// DOM elements
 const usernameInput = document.getElementById("username");
 const roomCodeInput = document.getElementById("room-code");
 const createRoomBtn = document.getElementById("create-room-btn");
@@ -25,23 +24,26 @@ const sendBtn = document.getElementById("send-btn");
 const leaveRoomBtn = document.getElementById("leave-room-btn");
 const roomTitle = document.getElementById("room-id");
 
-const encodedPassword = "Q09PTEdVWS"; 
+const encodedPassword = "Q09PTEdVWS";
 let roomId;
 let username;
 let isAdmin = false;
 
+// Show chat section
 function showChatSection() {
   authSection.style.display = "none";
   chatSection.style.display = "block";
 }
 
+// Clear chat box
 function clearChatBox() {
   chatBox.innerHTML = "";
 }
 
+// Listen for incoming messages
 function listenForMessages() {
-  const q = query(collection(db, "rooms", roomId, "messages"), orderBy("timestamp"));
-  onSnapshot(q, (snapshot) => {
+  const q = db.collection("rooms").doc(roomId).collection("messages").orderBy("timestamp");
+  q.onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
         const { username, text } = change.doc.data();
@@ -54,11 +56,12 @@ function listenForMessages() {
   });
 }
 
+// Generate random room code
 function generateRoomCode() {
-  const randomDigits = Math.floor(10000 + Math.random() * 90000);
-  return `${randomDigits}`;
+  return `${Math.floor(10000 + Math.random() * 90000)}`;
 }
 
+// Check admin password
 function checkAdminPassword(inputPassword) {
   if (atob(encodedPassword) === inputPassword) {
     isAdmin = true;
@@ -69,71 +72,84 @@ function checkAdminPassword(inputPassword) {
   }
 }
 
+// Display active rooms list in admin mode
 async function displayRoomsList() {
-  const roomsQuery = query(collection(db, "rooms"), where("active", "==", true));
-  const querySnapshot = await getDocs(roomsQuery);
+  const roomsQuery = db.collection("rooms").where("active", "==", true);
+  const querySnapshot = await roomsQuery.get();
   let roomsList = "Active Rooms:\n";
   querySnapshot.forEach((doc) => {
     roomsList += `- Room Code: ${doc.id}\n`;
   });
-  alert(roomsList);
+  const chosenRoom = prompt(`${roomsList}\nEnter room code to join:`);
+  if (chosenRoom) {
+    joinRoomAdmin(chosenRoom.trim());
+  }
 }
 
+// Admin joining room
+async function joinRoomAdmin(roomCode) {
+  const roomDoc = await db.collection("rooms").doc(roomCode).get();
+  if (roomDoc.exists) {
+    roomId = roomCode;
+    roomTitle.textContent = `Room: ${roomId}`;
+    showChatSection();
+    listenForMessages();
+  } else {
+    alert("Room not found.");
+  }
+}
+
+// Create a new room
 createRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
   if (!username) return alert("Please enter a username.");
-  roomId = generateRoomCode();
-  const roomName = document.getElementById("room-name").value.trim() || roomId; 
-  
-  await setDoc(doc(db, "rooms", roomId), {
-    active: true,
-    roomName: roomName
-  });
 
-  roomTitle.textContent = `Room: ${roomName}`;
+  roomId = generateRoomCode();
+  await db.collection("rooms").doc(roomId).set({ active: true });
+
+  roomTitle.textContent = `Room: ${roomId}`;
   showChatSection();
   listenForMessages();
 });
 
+// Join an existing room
 joinRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
   roomId = roomCodeInput.value.trim();
   if (!username || !roomId) return alert("Please enter both a username and room code.");
-  
-  const roomDoc = await getDoc(doc(db, "rooms", roomId));
-  if (!roomDoc.exists()) return alert("Room not found.");
-  
-  const roomData = roomDoc.data();
-  roomTitle.textContent = `Room: ${roomData.roomName || roomId}`;
 
+  const roomDoc = await db.collection("rooms").doc(roomId).get();
+  if (!roomDoc.exists()) return alert("Room not found.");
+
+  roomTitle.textContent = `Room: ${roomId}`;
   showChatSection();
   listenForMessages();
 });
 
+// Send message
 sendBtn.addEventListener("click", sendMessage);
-
 messageInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    sendMessage();
-  }
+  if (e.key === "Enter") sendMessage();
 });
 
 async function sendMessage() {
   const message = messageInput.value.trim();
   if (!message) return;
-  await addDoc(collection(db, "rooms", roomId, "messages"), {
+
+  await db.collection("rooms").doc(roomId).collection("messages").add({
     username,
     text: message,
-    timestamp: serverTimestamp()
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
   });
+
   messageInput.value = "";
   messageInput.focus();
 }
 
-leaveRoomBtn.addEventListener("click", () => {
-  location.reload();
-});
+// Leave room
+leaveRoomBtn.addEventListener("click", () => location.reload());
 
+// Activate admin mode
 document.addEventListener("keydown", (e) => {
   if (e.key === "`") {
     const adminPassword = prompt("Enter admin password:");
