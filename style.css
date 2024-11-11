@@ -150,6 +150,8 @@ button:hover {
   position: fixed;
   width: 99%;
   bottom: 0;
+  justify-self: center;
+  cursor: none;
   text-align: center;
   background-color: #1f51ff;
 }
