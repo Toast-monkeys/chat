@@ -6,23 +6,19 @@
   <title>Chat Room</title>
   <link rel="shortcut icon" href="img/text.png" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
-
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
-
 </head>
-
 <body>
-
   <div id="app">
     <div id="auth-section">
       <h1>Chat Room</h1>
       <input type="text" id="username" placeholder="Enter your username">
       <input type="text" id="room-code" placeholder="Enter room code">
+      <input type="text" id="room-name" placeholder="Enter room name">
       <button id="create-room-btn">Create Room</button>
       <button id="join-room-btn">Join Room</button>
     </div>
-
     <div id="chat-section" style="display:none;">
       <h2 id="room-title">Room: <span id="room-id"></span></h2>
       <div id="chat-box"></div>
@@ -31,12 +27,9 @@
       <button id="leave-room-btn">Leave Room</button>
     </div>
   </div>
-
   <div class="footer">
     Made by <a href="https://sprintingsnail69.github.io/" target="_blank">SprintingSnail69</a>
   </div>
-
   <script src="main.js" type="module"></script>
-  
 </body>
 </html>

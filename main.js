@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-import { getFirestore, doc, setDoc, addDoc, collection, onSnapshot, serverTimestamp, query, orderBy, getDoc, getDocs, updateDoc, deleteDoc, where } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, addDoc, collection, onSnapshot, serverTimestamp, query, orderBy, getDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMGCzjVLZUVZHCCxBDql5npVz_wcKxEX4",
@@ -74,44 +74,41 @@ async function displayRoomsList() {
   const querySnapshot = await getDocs(roomsQuery);
   let roomsList = "Active Rooms:\n";
   querySnapshot.forEach((doc) => {
-    if (doc.data().users.length > 0) {  // Only show rooms with users in them
-      roomsList += `- Room Code: ${doc.id}\n`;
-    }
+    roomsList += `- Room Code: ${doc.id}\n`;
   });
-  const roomCode = prompt(`${roomsList}Enter the room code to join:`);
-  if (roomCode) joinRoom(roomCode);
+  alert(roomsList);
 }
 
-async function createRoom() {
+createRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
   if (!username) return alert("Please enter a username.");
   roomId = generateRoomCode();
+  const roomName = document.getElementById("room-name").value.trim() || roomId; 
+  
   await setDoc(doc(db, "rooms", roomId), {
     active: true,
-    users: [username] // Add the username to the users list when they create a room
+    roomName: roomName
   });
 
-  roomTitle.textContent = `Room: ${roomId}`;
+  roomTitle.textContent = `Room: ${roomName}`;
   showChatSection();
   listenForMessages();
-}
+});
 
-async function joinRoom(roomCode) {
+joinRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
-  if (!username || !roomCode) return alert("Please enter both a username and room code.");
-
-  const roomDoc = await getDoc(doc(db, "rooms", roomCode));
+  roomId = roomCodeInput.value.trim();
+  if (!username || !roomId) return alert("Please enter both a username and room code.");
+  
+  const roomDoc = await getDoc(doc(db, "rooms", roomId));
   if (!roomDoc.exists()) return alert("Room not found.");
+  
+  const roomData = roomDoc.data();
+  roomTitle.textContent = `Room: ${roomData.roomName || roomId}`;
 
-  await updateDoc(doc(db, "rooms", roomCode), {
-    users: [...roomDoc.data().users, username] // Add the username to the room's users list
-  });
-
-  roomId = roomCode;
-  roomTitle.textContent = `Room: ${roomId}`;
   showChatSection();
   listenForMessages();
-}
+});
 
 sendBtn.addEventListener("click", sendMessage);
 
@@ -133,18 +130,7 @@ async function sendMessage() {
   messageInput.focus();
 }
 
-leaveRoomBtn.addEventListener("click", async () => {
-  const roomDoc = await getDoc(doc(db, "rooms", roomId));
-  const updatedUsers = roomDoc.data().users.filter(user => user !== username);
-
-  await updateDoc(doc(db, "rooms", roomId), {
-    users: updatedUsers
-  });
-
-  if (updatedUsers.length === 0) {
-    await deleteDoc(doc(db, "rooms", roomId));
-  }
-
+leaveRoomBtn.addEventListener("click", () => {
   location.reload();
 });
 
