@@ -13,21 +13,28 @@
 
 </head>
 <body>
+  <div class="spacer"></div>
   <div id="app">
     <div id="auth-section">
       <h1>Join a Chat Room</h1>
-      <input type="text" id="username" placeholder="Enter your username">
-      <input type="text" id="room-code" placeholder="Enter room code">
-      <button id="create-room-btn">Create Room</button>
-      <button id="join-room-btn">Join Room</button>
+      <div class="container2">
+        <input type="text" id="username" placeholder="Enter your username">
+      <input type="text" id="room-code" placeholder="Enter room code"><br>
+      </div>
+      <div class="container">
+        <button id="create-room-btn" style="margin:5px;">Create Room</button>
+        <button id="join-room-btn" style="margin:5px;">Join Room</button>
+      </div><br>
     </div>
 
     <div id="chat-section" style="display:none;">
       <h2 id="room-title">Room: <span id="room-id"></span></h2>
       <div id="chat-box"></div>
       <input type="text" id="message-input" placeholder="Type your message...">
-      <button id="send-btn">Send</button>
-      <button id="leave-room-btn">Leave Room</button>
+      <div class="container">
+              <button id="send-btn" style="margin:5px;">Send</button>
+      <button id="leave-room-btn" style="margin:5px;">Leave Room</button>
+      </div>
     </div>
   </div>
 
@@ -86,15 +93,25 @@
           if (change.type === "added") {
             const { username, text } = change.doc.data();
             const msgEl = document.createElement("p");
-            msgEl.textContent = `${username}: ${text}`;
+            // Create a span for the username with the blue color
+            const usernameSpan = document.createElement("span");
+            usernameSpan.style.color = "#1f51ff";
+            usernameSpan.textContent = username;
+            usernameSpan.style.fontWeight = "bold";
+            // Create a text node for the message
+            const messageText = document.createTextNode(`: ${text}`);
+            // Append both elements to the paragraph
+            msgEl.appendChild(usernameSpan);
+            msgEl.appendChild(messageText);
             chatBox.appendChild(msgEl);
           }
         });
-
+    
         // Keep the chat scrolled to the bottom
         chatBox.scrollTop = chatBox.scrollHeight;
       });
     }
+    
 
     // Create a new room
     createRoomBtn.addEventListener("click", async () => {
