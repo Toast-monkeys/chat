@@ -137,3 +137,25 @@ button:hover {
 .footer a:hover {
   color: #fff;
 }
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+.madeby {
+  color: white;
+  font-size: 14;
+  font-weight: 500;
+  padding: 10px;
+  position: fixed;
+  width: 99%;
+  bottom: 0;
+  text-align: center;
+  background-color: #1f51ff;
+}
+
+.madeby a {
+  color: white;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
