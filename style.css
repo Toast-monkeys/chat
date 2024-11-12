@@ -122,7 +122,7 @@ button:hover {
   width: 300px;
 }
 
-#leave-room-btn :hover{
+#leave-room-btn:hover {
   background-color: #9c3131;
 }
 
