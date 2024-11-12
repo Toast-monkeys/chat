@@ -67,7 +67,7 @@ h1 {
 }
 
 button {
-  background-color: #1f51ff;
+  background-color: #3154d4;
   color: #fff;
   cursor: pointer;
   border: none;
@@ -77,7 +77,8 @@ button {
 
 button:hover {
   scale: 1.05;
-}  /* Slightly darker hover*/
+  background-color: #1e399a;
+}  
 
 #chat-box {
   height: 300px; 
@@ -151,9 +152,8 @@ button:hover {
   width: 99%;
   bottom: 0;
   justify-self: center;
-  cursor: none;
   text-align: center;
-  background-color: #1f51ff;
+  background-color: #3154d4;
 }
 
 .madeby a {
