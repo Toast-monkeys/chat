@@ -122,6 +122,10 @@ button:hover {
   width: 300px;
 }
 
+#leave-room-btn :hover{
+  background-color: #9c3131;
+}
+
 .footer {
   text-align: center;
   padding: 10px;
