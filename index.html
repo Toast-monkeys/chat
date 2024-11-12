@@ -10,16 +10,15 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
-  
 </head>
 
+<body>
   <div class="spacer"></div>
   <div id="app">
     <div id="auth-section">
       <h1>Chat Room</h1>
       <div class="container2">
         <input type="text" id="username" placeholder="Enter your username">
-        <input type="text" id="room-code" placeholder="Enter room code"><br>
       </div>
       <div class="container">
         <button id="create-room-btn" style="margin:5px;">Create Room</button>
@@ -36,6 +35,15 @@
         <button id="leave-room-btn" style="margin:5px;">Leave Room</button>
       </div>
     </div>
+
+    <div id="room-options" style="display:none;">
+      <label for="privacy-toggle">Private Room:</label>
+      <input type="checkbox" id="privacy-toggle">
+    </div>
+
+    <div id="join-room-list" style="display:none;">
+      <!-- List of rooms will show up here -->
+    </div>
   </div>
 
   <footer>
@@ -44,6 +52,5 @@
 
   <!-- JavaScript Logic -->
   <script type="module" src="main.js"></script>
-
 </body>
 </html>

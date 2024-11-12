@@ -14,7 +14,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const usernameInput = document.getElementById("username");
-const roomCodeInput = document.getElementById("room-code");
 const createRoomBtn = document.getElementById("create-room-btn");
 const joinRoomBtn = document.getElementById("join-room-btn");
 const chatSection = document.getElementById("chat-section");
@@ -24,9 +23,13 @@ const messageInput = document.getElementById("message-input");
 const sendBtn = document.getElementById("send-btn");
 const leaveRoomBtn = document.getElementById("leave-room-btn");
 const roomTitle = document.getElementById("room-id");
+const privacyToggle = document.getElementById("privacy-toggle");
+const roomOptions = document.getElementById("room-options");
+const joinRoomList = document.getElementById("join-room-list");
 
 let roomId;
 let username;
+let isPrivate = false;
 
 function showChatSection() {
   authSection.style.display = "none";
@@ -56,58 +59,63 @@ function listenForMessages() {
         chatBox.appendChild(msgEl);
       }
     });
-    chatBox.scrollTop = chatBox.scrollHeight;
   });
 }
 
-// Create a new room
 createRoomBtn.addEventListener("click", async () => {
   username = usernameInput.value.trim();
-  if (!username) return alert("Please enter a username.");
+  if (!username) {
+    alert("Please enter a username!");
+    return;
+  }
 
-  // Generate a 5-digit room code
-  roomId = Math.floor(10000 + Math.random() * 90000).toString();
-  await setDoc(doc(db, "rooms", roomId), {});
-
-  roomTitle.textContent = roomId;
-  showChatSection();
-  listenForMessages();
+  roomOptions.style.display = "block";  // Show the privacy toggle
 });
 
-// Join an existing room
-joinRoomBtn.addEventListener("click", async () => {
-  username = usernameInput.value.trim();
-  roomId = roomCodeInput.value.trim();
-
-  if (!username || !roomId) return alert("Please enter both a username and room code.");
-
-  const roomDoc = await getDoc(doc(db, "rooms", roomId));
-  if (!roomDoc.exists()) return alert("Room not found.");
-
-  roomTitle.textContent = roomId;
-  showChatSection();
-  listenForMessages();
+privacyToggle.addEventListener("change", (e) => {
+  isPrivate = e.target.checked;
 });
 
-sendBtn.addEventListener("click", sendMessage);
+joinRoomBtn.addEventListener("click", () => {
+  joinRoomList.innerHTML = "";
+  joinRoomList.style.display = "block";
+  const q = query(collection(db, "rooms"), orderBy("timestamp"));
+  onSnapshot(q, (snapshot) => {
+    snapshot.docs.forEach((doc) => {
+      const room = doc.data();
+      const roomEl = document.createElement("div");
+      const roomName = document.createElement("p");
+      roomName.textContent = `Room Code: ${doc.id} (${room.isPrivate ? "Private" : "Public"})`;
+      const joinBtn = document.createElement("button");
+      joinBtn.textContent = "Join Room";
+      joinBtn.addEventListener("click", async () => {
+        roomId = doc.id;
+        await setDoc(doc(db, "rooms", roomId, "users", username), { username, timestamp: serverTimestamp() });
+        showChatSection();
+        listenForMessages();
+      });
 
-messageInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") sendMessage();
+      roomEl.appendChild(roomName);
+      roomEl.appendChild(joinBtn);
+      joinRoomList.appendChild(roomEl);
+    });
+  });
 });
 
-async function sendMessage() {
+sendBtn.addEventListener("click", async () => {
   const message = messageInput.value.trim();
   if (!message) return;
 
   await addDoc(collection(db, "rooms", roomId, "messages"), {
     username,
     text: message,
-    timestamp: serverTimestamp()
+    timestamp: serverTimestamp(),
   });
-
   messageInput.value = "";
-}
+});
 
 leaveRoomBtn.addEventListener("click", () => {
-  location.reload();
+  authSection.style.display = "block";
+  chatSection.style.display = "none";
+  clearChatBox();
 });
