@@ -10,8 +10,8 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
+  
 </head>
-
 <body>
   <div class="spacer"></div>
   <div id="app">
@@ -23,7 +23,25 @@
       <div class="container">
         <button id="create-room-btn" style="margin:5px;">Create Room</button>
         <button id="join-room-btn" style="margin:5px;">Join Room</button>
-      </div><br>
+      </div>
+      
+      <!-- Toggle for privacy -->
+      <div id="room-options" style="display:none;">
+        <label for="privacy-toggle">Room Privacy:</label>
+        <label class="switch">
+          <input type="checkbox" id="privacy-toggle" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <!-- Room code input -->
+      <div id="join-room-list" style="display:none;">
+        <ul id="room-list"></ul>
+      </div>
+      
+      <div class="container">
+        <input type="text" id="room-code" placeholder="Enter room code">
+      </div>
     </div>
 
     <div id="chat-section" style="display:none;">
@@ -35,15 +53,6 @@
         <button id="leave-room-btn" style="margin:5px;">Leave Room</button>
       </div>
     </div>
-
-    <div id="room-options" style="display:none;">
-      <label for="privacy-toggle">Private Room:</label>
-      <input type="checkbox" id="privacy-toggle">
-    </div>
-
-    <div id="join-room-list" style="display:none;">
-      <!-- List of rooms will show up here -->
-    </div>
   </div>
 
   <footer>
@@ -52,5 +61,6 @@
 
   <!-- JavaScript Logic -->
   <script type="module" src="main.js"></script>
+
 </body>
 </html>
