@@ -11,7 +11,7 @@ body {
 
 @font-face {
   font-family: Inter;
-  src: url(Inter.ttf);
+  src: url(fonts/Inter.ttf);
 }
 
 .spacer {
