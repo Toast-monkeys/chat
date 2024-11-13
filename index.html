@@ -12,36 +12,19 @@
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
   
 </head>
-<body>
+
   <div class="spacer"></div>
   <div id="app">
     <div id="auth-section">
       <h1>Chat Room</h1>
       <div class="container2">
         <input type="text" id="username" placeholder="Enter your username">
+        <input type="text" id="room-code" placeholder="Enter room code"><br>
       </div>
       <div class="container">
         <button id="create-room-btn" style="margin:5px;">Create Room</button>
         <button id="join-room-btn" style="margin:5px;">Join Room</button>
-      </div>
-      
-      <!-- Toggle for privacy -->
-      <div id="room-options" style="display:none;">
-        <label for="privacy-toggle">Room Privacy:</label>
-        <label class="switch">
-          <input type="checkbox" id="privacy-toggle" checked>
-          <span class="slider round"></span>
-        </label>
-      </div>
-
-      <!-- Room code input -->
-      <div id="join-room-list" style="display:none;">
-        <ul id="room-list"></ul>
-      </div>
-      
-      <div class="container">
-        <input type="text" id="room-code" placeholder="Enter room code">
-      </div>
+      </div><br>
     </div>
 
     <div id="chat-section" style="display:none;">
