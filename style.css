@@ -9,6 +9,10 @@ body {
   min-height: 100vh;
 }
 
+* {
+  font-family: Inter;
+}
+
 @font-face {
   font-family: Inter;
   src: url(fonts/Inter.ttf);
