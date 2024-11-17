@@ -8,10 +8,10 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
-  <link href="assets/fontawesome/css/all.css" rel="stylesheet" />
+  <link href="/assets/fontawesome/css/all.css" rel="stylesheet" />
 </head>
-<body><br><br><br>
-  <div id="app" style="font-family: Inter;">
+<body>
+  <div id="app">
     <div id="auth-section">
       <h1>Chat Room</h1>
       <div class="container2">
@@ -21,12 +21,13 @@
       <div class="container">
         <button id="create-room-btn" style="margin:5px;">Create Room</button>
         <button id="join-room-btn" style="margin:5px;">Join Room</button>
-      </div><br>
+      </div><br><br>
+      <p class="general" ><i><center>To join the general chat room, enter the code 7h5u7d</center></i></p>
     </div>
 
     <div id="chat-section" style="display:none;">
       <h2 id="room-title">Room: <span id="room-id"></span></h2>
-      <center><p class="clicktocopy" style="margin-top: -10px;"><i>Click the code to copy it!</i></p></center> 
+      <center><p class="clicktocopy" style="margin-top: -10px;"><i>Click the code to copy it!</i></p></center>
       <div id="chat-box"></div>
       <input type="text" id="message-input" placeholder="Type your message...">
       <div class="container">

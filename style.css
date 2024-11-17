@@ -85,11 +85,10 @@ button {
 
 button:hover {
   scale: 1.05;
-  background-color: #122e93;
 }
 
 #chat-box {
-  height: 340px; 
+  height: 350px; 
   overflow-y: auto;
   background-color: white;
   padding: 20px;
@@ -160,7 +159,6 @@ button:hover {
   width: 99%;
   bottom: 0;
   justify-self: center;
-  cursor: none;
   text-align: center;
   background-color: #1f51ff;
 }
@@ -251,4 +249,13 @@ button:hover {
   font-style: italic;
   margin-top: -10px;
   top: -10px;
+}
+
+.general {
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  font-style: italic;
+  margin-top: -5px;
+  margin-bottom: -25px;
 }
